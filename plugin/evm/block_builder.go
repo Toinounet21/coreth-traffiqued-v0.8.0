@@ -24,11 +24,11 @@ type buildingBlkStatus uint8
 
 var (
 	// AP3 Params
-	minBlockTime = 2 * time.Second
-	maxBlockTime = 3 * time.Second
+	minBlockTime = 0 * time.Second
+	maxBlockTime = 0 * time.Second
 
 	// AP4 Params
-	minBlockTimeAP4 = 500 * time.Millisecond
+	minBlockTimeAP4 = 100 * time.Millisecond
 )
 
 const (
@@ -376,11 +376,9 @@ func (b *blockBuilder) signalTxsReady() {
 		return
 	}
 
-	if b.isAP4 {
-		b.buildStatus = conditionalBuild
-		b.buildBlockTimer.SetTimeoutIn(minBlockTime)
-		return
-	}
+	b.buildStatus = conditionalBuild
+	b.buildBlockTimer.SetTimeoutIn(minBlockTime)
+	return
 
 	// We take a naive approach here and signal the engine that we should build
 	// a block as soon as we receive at least one transaction.
