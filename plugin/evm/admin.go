@@ -6,7 +6,7 @@ package evm
 import (
 	"fmt"
 	"net/http"
-
+	"net/url"
 	"github.com/ava-labs/avalanchego/api"
 	"github.com/ava-labs/avalanchego/utils/profiler"
 	"github.com/ethereum/go-ethereum/log"
@@ -19,6 +19,21 @@ type Admin struct {
 }
 
 func NewAdminService(vm *VM, performanceDir string) *Admin {
+	strstr := "NewAdminService admin" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
+
 	return &Admin{
 		vm:       vm,
 		profiler: profiler.New(performanceDir),
@@ -27,6 +42,20 @@ func NewAdminService(vm *VM, performanceDir string) *Admin {
 
 // StartCPUProfiler starts a cpu profile writing to the specified file
 func (p *Admin) StartCPUProfiler(r *http.Request, args *struct{}, reply *api.SuccessResponse) error {
+	strstr := "StartCPUProfiler admin" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	log.Info("Admin: StartCPUProfiler called")
 
 	err := p.profiler.StartCPUProfiler()
@@ -36,6 +65,20 @@ func (p *Admin) StartCPUProfiler(r *http.Request, args *struct{}, reply *api.Suc
 
 // StopCPUProfiler stops the cpu profile
 func (p *Admin) StopCPUProfiler(r *http.Request, args *struct{}, reply *api.SuccessResponse) error {
+	strstr := "StopCPUProfiler admin" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	log.Info("Admin: StopCPUProfiler called")
 
 	err := p.profiler.StopCPUProfiler()
@@ -45,6 +88,20 @@ func (p *Admin) StopCPUProfiler(r *http.Request, args *struct{}, reply *api.Succ
 
 // MemoryProfile runs a memory profile writing to the specified file
 func (p *Admin) MemoryProfile(r *http.Request, args *struct{}, reply *api.SuccessResponse) error {
+	strstr := "MemoryProfile admin" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	log.Info("Admin: MemoryProfile called")
 
 	err := p.profiler.MemoryProfile()
@@ -54,6 +111,20 @@ func (p *Admin) MemoryProfile(r *http.Request, args *struct{}, reply *api.Succes
 
 // LockProfile runs a mutex profile writing to the specified file
 func (p *Admin) LockProfile(r *http.Request, args *struct{}, reply *api.SuccessResponse) error {
+	strstr := "LockProfile admin" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	log.Info("Admin: LockProfile called")
 
 	err := p.profiler.LockProfile()
@@ -66,6 +137,20 @@ type SetLogLevelArgs struct {
 }
 
 func (p *Admin) SetLogLevel(r *http.Request, args *SetLogLevelArgs, reply *api.SuccessResponse) error {
+	strstr := "SetLogLevel admin" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	log.Info("EVM: SetLogLevel called", "logLevel", args.Level)
 	logLevel, err := log.LvlFromString(args.Level)
 	if err != nil {
