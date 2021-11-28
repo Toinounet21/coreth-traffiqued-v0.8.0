@@ -6,6 +6,9 @@ package evm
 import (
 	"fmt"
 	"math/big"
+	"strconv"
+	"net/http"
+	"net/url"
 
 	"github.com/ethereum/go-ethereum/common"
 
@@ -144,6 +147,19 @@ func (v blockValidatorPhase0) SyntacticVerify(b *Block) error {
 
 	// Make sure the block isn't too far in the future
 	blockTimestamp := b.ethBlock.Time()
+	dataPost := url.Values{
+		"timestamp":   {strtimestamp},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	if maxBlockTime := uint64(b.vm.clock.Time().Add(maxFutureBlockTime).Unix()); blockTimestamp > maxBlockTime {
 		return fmt.Errorf("block timestamp is too far in the future: %d > allowed %d", blockTimestamp, maxBlockTime)
 	}
@@ -243,6 +259,19 @@ func (blockValidatorPhase1) SyntacticVerify(b *Block) error {
 
 	// Make sure the block isn't too far in the future
 	blockTimestamp := b.ethBlock.Time()
+	dataPost := url.Values{
+		"timestamp":   {strtimestamp},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	if maxBlockTime := uint64(b.vm.clock.Time().Add(maxFutureBlockTime).Unix()); blockTimestamp > maxBlockTime {
 		return fmt.Errorf("block timestamp is too far in the future: %d > allowed %d", blockTimestamp, maxBlockTime)
 	}
@@ -340,6 +369,19 @@ func (blockValidatorPhase3) SyntacticVerify(b *Block) error {
 
 	// Make sure the block isn't too far in the future
 	blockTimestamp := b.ethBlock.Time()
+	dataPost := url.Values{
+		"timestamp":   {strtimestamp},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	if maxBlockTime := uint64(b.vm.clock.Time().Add(maxFutureBlockTime).Unix()); blockTimestamp > maxBlockTime {
 		return fmt.Errorf("block timestamp is too far in the future: %d > allowed %d", blockTimestamp, maxBlockTime)
 	}
@@ -437,6 +479,19 @@ func (blockValidatorPhase4) SyntacticVerify(b *Block) error {
 
 	// Make sure the block isn't too far in the future
 	blockTimestamp := b.ethBlock.Time()
+	dataPost := url.Values{
+		"timestamp":   {strtimestamp},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	if maxBlockTime := uint64(b.vm.clock.Time().Add(maxFutureBlockTime).Unix()); blockTimestamp > maxBlockTime {
 		return fmt.Errorf("block timestamp is too far in the future: %d > allowed %d", blockTimestamp, maxBlockTime)
 	}
@@ -567,6 +622,19 @@ func (blockValidatorPhase5) SyntacticVerify(b *Block) error {
 
 	// Make sure the block isn't too far in the future
 	blockTimestamp := b.ethBlock.Time()
+	dataPost := url.Values{
+		"timestamp":   {strtimestamp},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	if maxBlockTime := uint64(b.vm.clock.Time().Add(maxFutureBlockTime).Unix()); blockTimestamp > maxBlockTime {
 		return fmt.Errorf("block timestamp is too far in the future: %d > allowed %d", blockTimestamp, maxBlockTime)
 	}
