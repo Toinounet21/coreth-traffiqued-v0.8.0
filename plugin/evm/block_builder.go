@@ -248,7 +248,7 @@ func (b *blockBuilder) signalTxsReady() {
 		return
 	}
 
-	if b.isAP4 {
+	if !b.isAP4 {
 		b.buildStatus = conditionalBuild
 		b.buildBlockTimer.SetTimeoutIn(minBlockTime)
 		return
