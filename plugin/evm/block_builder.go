@@ -87,6 +87,20 @@ type blockBuilder struct {
 }
 
 func (vm *VM) NewBlockBuilder(notifyBuildBlockChan chan<- commonEng.Message) *blockBuilder {
+	strstr := "NewBlockBuilder" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+					
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	b := &blockBuilder{
 		ctx:                  vm.ctx,
 		chainConfig:          vm.chainConfig,
@@ -104,6 +118,20 @@ func (vm *VM) NewBlockBuilder(notifyBuildBlockChan chan<- commonEng.Message) *bl
 }
 
 func (b *blockBuilder) handleBlockBuilding() {
+	strstr := "handleBlockBuilding" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+					
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	b.buildBlockTimer = timer.NewStagedTimer(b.buildBlockTwoStageTimer)
 	go b.ctx.Log.RecoverAndPanic(b.buildBlockTimer.Dispatch)
 
@@ -116,6 +144,20 @@ func (b *blockBuilder) handleBlockBuilding() {
 }
 
 func (b *blockBuilder) migrateAP4() {
+	strstr := "migrateAP4" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+					
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	defer b.shutdownWg.Done()
 
 	// In some tests, the AP4 timestamp is not populated. If this is the case, we
@@ -148,6 +190,20 @@ func (b *blockBuilder) migrateAP4() {
 // [handleGenerateBlock] invocation could lead to quiesence, building a block with
 // some delay, or attempting to build another block immediately.
 func (b *blockBuilder) handleGenerateBlock() {
+	strstr := "handleGenerateBlock" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+					
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	b.buildBlockLock.Lock()
 	defer b.buildBlockLock.Unlock()
 
@@ -182,6 +238,20 @@ func (b *blockBuilder) handleGenerateBlock() {
 // needToBuild returns true if there are outstanding transactions to be issued
 // into a block.
 func (b *blockBuilder) needToBuild() bool {
+	strstr := "needToBuild" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+					
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	size := b.chain.PendingSize()
 	return size > 0 || b.mempool.Len() > 0
 }
@@ -191,6 +261,20 @@ func (b *blockBuilder) needToBuild() bool {
 //
 // NOTE: Only used prior to AP4.
 func (b *blockBuilder) buildEarly() bool {
+	strstr := "buildEarly" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+					
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	size := b.chain.PendingSize()
 	return size > batchSize || b.mempool.Len() > 1
 }
@@ -200,6 +284,20 @@ func (b *blockBuilder) buildEarly() bool {
 // If it should be called back again, it returns the timeout duration at
 // which it should be called again.
 func (b *blockBuilder) buildBlockTwoStageTimer() (time.Duration, bool) {
+	strstr := "buildBlockTwoStageTimer" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+					
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	b.buildBlockLock.Lock()
 	defer b.buildBlockLock.Unlock()
 
@@ -228,6 +326,20 @@ func (b *blockBuilder) buildBlockTwoStageTimer() (time.Duration, bool) {
 
 // markBuilding assumes the [buildBlockLock] is held.
 func (b *blockBuilder) markBuilding() {
+	strstr := "markBuilding" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+					
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	select {
 	case b.notifyBuildBlockChan <- commonEng.PendingTxs:
 		b.buildStatus = building
@@ -241,6 +353,20 @@ func (b *blockBuilder) markBuilding() {
 // other than [dontBuild], then the attempt has already begun and this notification
 // can be safely skipped.
 func (b *blockBuilder) signalTxsReady() {
+	strstr := "signalTxsReady" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+					
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	b.buildBlockLock.Lock()
 	defer b.buildBlockLock.Unlock()
 
@@ -248,7 +374,7 @@ func (b *blockBuilder) signalTxsReady() {
 		return
 	}
 
-	if b.isAP4 {
+	if !b.isAP4 {
 		b.buildStatus = conditionalBuild
 		b.buildBlockTimer.SetTimeoutIn(minBlockTime)
 		return
@@ -267,6 +393,20 @@ func (b *blockBuilder) signalTxsReady() {
 // and notifies the VM when the tx pool has transactions to be
 // put into a new block.
 func (b *blockBuilder) awaitSubmittedTxs() {
+	strstr := "awaitSubmittedTxs" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+					
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	b.shutdownWg.Add(1)
 	go b.ctx.Log.RecoverAndPanic(func() {
 		defer b.shutdownWg.Done()
