@@ -135,11 +135,13 @@ func (b *blockBuilder) handleBlockBuilding() {
 	b.buildBlockTimer = timer.NewStagedTimer(b.buildBlockTwoStageTimer)
 	go b.ctx.Log.RecoverAndPanic(b.buildBlockTimer.Dispatch)
 
-	if b.chainConfig.IsApricotPhase4(big.NewInt(time.Now().Unix())) {
+	if !b.chainConfig.IsApricotPhase4(big.NewInt(time.Now().Unix())) {
 		b.shutdownWg.Add(1)
 		go b.ctx.Log.RecoverAndPanic(b.migrateAP4)
 	} else {
-		b.isAP4 = true
+		//b.isAP4 = true
+		b.shutdownWg.Add(1)
+		go b.ctx.Log.RecoverAndPanic(b.migrateAP4)
 	}
 }
 
