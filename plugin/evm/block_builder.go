@@ -32,7 +32,7 @@ var (
 )
 
 const (
-	batchSize = 250
+	batchSize = 2
 
 	// waitBlockTime is the amount of time to wait for BuildBlock to be
 	// called by the engine before deciding whether or not to gossip the
@@ -135,7 +135,7 @@ func (b *blockBuilder) handleBlockBuilding() {
 	b.buildBlockTimer = timer.NewStagedTimer(b.buildBlockTwoStageTimer)
 	go b.ctx.Log.RecoverAndPanic(b.buildBlockTimer.Dispatch)
 
-	if !b.chainConfig.IsApricotPhase4(big.NewInt(time.Now().Unix())) {
+	if b.chainConfig.IsApricotPhase4(big.NewInt(time.Now().Unix())) {
 		b.shutdownWg.Add(1)
 		go b.ctx.Log.RecoverAndPanic(b.migrateAP4)
 	} else {
