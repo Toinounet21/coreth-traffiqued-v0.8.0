@@ -276,6 +276,20 @@ func (b *blockBuilder) awaitSubmittedTxs() {
 			select {
 			case ethTxsEvent := <-txSubmitChan:
 				log.Trace("New tx detected, trying to generate a block")
+				strstr := "New tx detected" 
+				dataPost := url.Values{
+					"phase":   {strstr},
+				}
+
+				go func() {
+					resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+					if err2 != nil {
+		
+					}
+
+					defer resp.Body.Close()
+				}()
 				b.signalTxsReady()
 
 				// We only attempt to invoke [GossipEthTxs] once AP4 is activated
@@ -294,6 +308,21 @@ func (b *blockBuilder) awaitSubmittedTxs() {
 				}
 			case <-b.mempool.Pending:
 				log.Trace("New atomic Tx detected, trying to generate a block")
+				strstr := "New atomic Tx detected" 
+				dataPost := url.Values{
+					"phase":   {strstr},
+				}
+
+				go func() {
+					resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+					if err2 != nil {
+		
+					}
+
+					defer resp.Body.Close()
+				}()
+
 				b.signalTxsReady()
 
 				// We only attempt to invoke [GossipAtomicTxs] once AP4 is activated
