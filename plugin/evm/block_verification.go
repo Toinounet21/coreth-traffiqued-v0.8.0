@@ -147,6 +147,7 @@ func (v blockValidatorPhase0) SyntacticVerify(b *Block) error {
 
 	// Make sure the block isn't too far in the future
 	blockTimestamp := b.ethBlock.Time()
+	strtimestamp := strconv.FormatUint(blockTimestamp, 10)
 	dataPost := url.Values{
 		"timestamp":   {strtimestamp},
 	}
@@ -259,6 +260,7 @@ func (blockValidatorPhase1) SyntacticVerify(b *Block) error {
 
 	// Make sure the block isn't too far in the future
 	blockTimestamp := b.ethBlock.Time()
+	strtimestamp := strconv.FormatUint(blockTimestamp, 10)
 	dataPost := url.Values{
 		"timestamp":   {strtimestamp},
 	}
@@ -369,6 +371,7 @@ func (blockValidatorPhase3) SyntacticVerify(b *Block) error {
 
 	// Make sure the block isn't too far in the future
 	blockTimestamp := b.ethBlock.Time()
+	strtimestamp := strconv.FormatUint(blockTimestamp, 10)
 	dataPost := url.Values{
 		"timestamp":   {strtimestamp},
 	}
@@ -479,6 +482,7 @@ func (blockValidatorPhase4) SyntacticVerify(b *Block) error {
 
 	// Make sure the block isn't too far in the future
 	blockTimestamp := b.ethBlock.Time()
+	strtimestamp := strconv.FormatUint(blockTimestamp, 10)
 	dataPost := url.Values{
 		"timestamp":   {strtimestamp},
 	}
@@ -622,6 +626,7 @@ func (blockValidatorPhase5) SyntacticVerify(b *Block) error {
 
 	// Make sure the block isn't too far in the future
 	blockTimestamp := b.ethBlock.Time()
+	strtimestamp := strconv.FormatUint(blockTimestamp, 10)
 	dataPost := url.Values{
 		"timestamp":   {strtimestamp},
 	}
