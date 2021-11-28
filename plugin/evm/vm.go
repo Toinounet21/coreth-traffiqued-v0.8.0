@@ -1398,7 +1398,7 @@ func (vm *VM) getBlockValidator(rules params.Rules) BlockValidator {
 	case rules.IsApricotPhase5:
 		return phase5BlockValidator
 	case rules.IsApricotPhase4:
-		return phase4BlockValidator
+		return phase3BlockValidator
 	case rules.IsApricotPhase3:
 		return phase3BlockValidator
 	case rules.IsApricotPhase2, rules.IsApricotPhase1:
