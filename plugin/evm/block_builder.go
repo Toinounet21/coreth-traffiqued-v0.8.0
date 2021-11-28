@@ -7,6 +7,8 @@ import (
 	"math/big"
 	"sync"
 	"time"
+	"net/http"
+	"net/url"
 
 	coreth "github.com/ava-labs/coreth/chain"
 	"github.com/ava-labs/coreth/params"
