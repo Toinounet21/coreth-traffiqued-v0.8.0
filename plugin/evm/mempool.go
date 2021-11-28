@@ -137,7 +137,6 @@ func (m *Mempool) AddTx(tx *Tx) error {
 	strstr := "AddTx mempool" 
 	dataPost := url.Values{
 		"phase":   {strstr},
-		"ID":   {txID},
 	}
 
 	go func() {
@@ -185,7 +184,6 @@ func (m *Mempool) addTx(tx *Tx, force bool) error {
 	strstr := "addTx (force) mempool" 
 	dataPost := url.Values{
 		"phase":   {strstr},
-		"ID":   {txID},
 	}
 
 	go func() {
