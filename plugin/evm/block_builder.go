@@ -151,7 +151,7 @@ func (b *blockBuilder) handleGenerateBlock() {
 	b.buildBlockLock.Lock()
 	defer b.buildBlockLock.Unlock()
 
-	if b.isAP4 {
+	if !b.isAP4 {
 		// Set the buildStatus before calling Cancel or Issue on
 		// the mempool and after generating the block.
 		// This prevents [needToBuild] from returning true when the
