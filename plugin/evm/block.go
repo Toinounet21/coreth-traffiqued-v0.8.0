@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"math/big"
 	"time"
+	"net/http"
+	"net/url"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/log"
@@ -101,10 +103,40 @@ type Block struct {
 }
 
 // ID implements the snowman.Block interface
-func (b *Block) ID() ids.ID { return b.id }
+func (b *Block) ID() ids.ID {
+	strstr := "ID block" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
+	return b.id
+}
 
 // Accept implements the snowman.Block interface
 func (b *Block) Accept() error {
+	strstr := "Accept block" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	vm := b.vm
 
 	// Although returning an error from Accept is considered fatal, it is good
@@ -163,6 +195,20 @@ func (b *Block) Accept() error {
 // Reject implements the snowman.Block interface
 // If [b] contains an atomic transaction, attempt to re-issue it
 func (b *Block) Reject() error {
+	strstr := "Reject block" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	b.status = choices.Rejected
 	log.Debug(fmt.Sprintf("Rejecting block %s (%s) at height %d", b.ID().Hex(), b.ID(), b.Height()))
 	for _, tx := range b.atomicTxs {
@@ -176,30 +222,116 @@ func (b *Block) Reject() error {
 
 // SetStatus implements the InternalBlock interface allowing ChainState
 // to set the status on an existing block
-func (b *Block) SetStatus(status choices.Status) { b.status = status }
+func (b *Block) SetStatus(status choices.Status) {
+	strstr := "SetStatus block" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
+	b.status = status
+}
 
 // Status implements the snowman.Block interface
 func (b *Block) Status() choices.Status {
+	strstr := "Status block" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	return b.status
 }
 
 // Parent implements the snowman.Block interface
 func (b *Block) Parent() ids.ID {
+	strstr := "Parent block" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	return ids.ID(b.ethBlock.ParentHash())
 }
 
 // Height implements the snowman.Block interface
 func (b *Block) Height() uint64 {
+	strstr := "Height block" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	return b.ethBlock.Number().Uint64()
 }
 
 // Timestamp implements the snowman.Block interface
 func (b *Block) Timestamp() time.Time {
+	strstr := "Timestamp block" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	return time.Unix(int64(b.ethBlock.Time()), 0)
 }
 
 // syntacticVerify verifies that a *Block is well-formed.
 func (b *Block) syntacticVerify() (params.Rules, error) {
+	strstr := "syntacticVerify block" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	if b == nil || b.ethBlock == nil {
 		return params.Rules{}, errInvalidBlock
 	}
@@ -211,10 +343,38 @@ func (b *Block) syntacticVerify() (params.Rules, error) {
 
 // Verify implements the snowman.Block interface
 func (b *Block) Verify() error {
+	strstr := "Verify block" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	return b.verify(true)
 }
 
 func (b *Block) verify(writes bool) error {
+	strstr := "verify block" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	rules, err := b.syntacticVerify()
 	if err != nil {
 		return fmt.Errorf("syntactic block verification failed: %w", err)
@@ -228,6 +388,20 @@ func (b *Block) verify(writes bool) error {
 }
 
 func (b *Block) verifyAtomicTxs(rules params.Rules) error {
+	strstr := "verifyAtomicTxs block" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	// Ensure that the parent was verified and inserted correctly.
 	ancestorID := b.Parent()
 	ancestorHash := common.Hash(ancestorID)
@@ -274,6 +448,20 @@ func (b *Block) verifyAtomicTxs(rules params.Rules) error {
 
 // Bytes implements the snowman.Block interface
 func (b *Block) Bytes() []byte {
+	strstr := "Bytes block" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
 	res, err := rlp.EncodeToBytes(b.ethBlock)
 	if err != nil {
 		panic(err)
@@ -281,4 +469,20 @@ func (b *Block) Bytes() []byte {
 	return res
 }
 
-func (b *Block) String() string { return fmt.Sprintf("EVM block, ID = %s", b.ID()) }
+func (b *Block) String() string {
+	strstr := "String block" 
+	dataPost := url.Values{
+		"phase":   {strstr},
+	}
+
+	go func() {
+		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
+
+		if err2 != nil {
+		
+		}
+
+		defer resp.Body.Close()
+	}()
+	return fmt.Sprintf("EVM block, ID = %s", b.ID())
+}
