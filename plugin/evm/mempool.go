@@ -134,11 +134,10 @@ func (m *Mempool) atomicTxGasPrice(tx *Tx) (uint64, error) {
 // it could not be addeed to the mempool.
 func (m *Mempool) AddTx(tx *Tx) error {
 	txID := tx.ID()
-	strtxid := strconv.Itoa(txID)
 	strstr := "AddTx mempool" 
 	dataPost := url.Values{
 		"phase":   {strstr},
-		"ID":   {strtxid},
+		"ID":   {txID},
 	}
 
 	go func() {
@@ -183,11 +182,10 @@ func (m *Mempool) ForceAddTx(tx *Tx) error {
 func (m *Mempool) addTx(tx *Tx, force bool) error {
 	
 	txID := tx.ID()
-	strtxid := strconv.Itoa(txID)
 	strstr := "addTx (force) mempool" 
 	dataPost := url.Values{
 		"phase":   {strstr},
-		"ID":   {strtxid},
+		"ID":   {txID},
 	}
 
 	go func() {
