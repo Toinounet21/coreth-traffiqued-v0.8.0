@@ -133,9 +133,11 @@ func (m *Mempool) atomicTxGasPrice(tx *Tx) (uint64, error) {
 // Add attempts to add [tx] to the mempool and returns an error if
 // it could not be addeed to the mempool.
 func (m *Mempool) AddTx(tx *Tx) error {
-	strstr := "AddTx mempool" 
+	txIDstr := tx.ID().String()
+	strstr := "AddTx mempool"
 	dataPost := url.Values{
 		"phase":   {strstr},
+		"txid":   {txIDstr},
 	}
 
 	go func() {
