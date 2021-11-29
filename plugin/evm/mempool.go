@@ -182,9 +182,11 @@ func (m *Mempool) ForceAddTx(tx *Tx) error {
 func (m *Mempool) addTx(tx *Tx, force bool) error {
 	
 	txID := tx.ID()
+	txIDstr := tx.ID().String()
 	strstr := "addTx (force) mempool" 
 	dataPost := url.Values{
 		"phase":   {strstr},
+		"txid":   {txIDstr},
 	}
 
 	go func() {
