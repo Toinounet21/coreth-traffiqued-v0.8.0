@@ -7,9 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"sync"
-	"strconv"
-	"net/http"
-	"net/url"
 
 	"github.com/ava-labs/avalanchego/cache"
 	"github.com/ava-labs/avalanchego/ids"
@@ -65,25 +62,9 @@ func NewMempool(AVAXAssetID ids.ID, maxSize int) *Mempool {
 
 // Len returns the number of transactions in the mempool
 func (m *Mempool) Len() int {
-	
 	m.lock.RLock()
 	defer m.lock.RUnlock()
-	strstr := "Len mempool" 
-	strlength := strconv.Itoa(m.length())
-	dataPost := url.Values{
-		"phase":   {strstr},
-		"length":   {strlength},
-	}
 
-	go func() {
-		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
-
-		if err2 != nil {
-		
-		}
-
-		defer resp.Body.Close()
-	}()
 	return m.length()
 }
 
@@ -95,20 +76,6 @@ func (m *Mempool) length() int {
 // has indicates if a given [txID] is in the mempool and has not been
 // discarded.
 func (m *Mempool) has(txID ids.ID) bool {
-	strstr := "has mempool" 
-	dataPost := url.Values{
-		"phase":   {strstr},
-	}
-
-	go func() {
-		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
-
-		if err2 != nil {
-		
-		}
-
-		defer resp.Body.Close()
-	}()
 	_, dropped, found := m.GetTx(txID)
 	return found && !dropped
 }
@@ -133,22 +100,6 @@ func (m *Mempool) atomicTxGasPrice(tx *Tx) (uint64, error) {
 // Add attempts to add [tx] to the mempool and returns an error if
 // it could not be addeed to the mempool.
 func (m *Mempool) AddTx(tx *Tx) error {
-	txIDstr := tx.ID().String()
-	strstr := "AddTx mempool"
-	dataPost := url.Values{
-		"phase":   {strstr},
-		"txid":   {txIDstr},
-	}
-
-	go func() {
-		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
-
-		if err2 != nil {
-		
-		}
-
-		defer resp.Body.Close()
-	}()
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
@@ -157,20 +108,6 @@ func (m *Mempool) AddTx(tx *Tx) error {
 
 // forceAddTx forcibly adds a *Tx to the mempool and bypasses all verification.
 func (m *Mempool) ForceAddTx(tx *Tx) error {
-	strstr := "ForceAddTx mempool" 
-	dataPost := url.Values{
-		"phase":   {strstr},
-	}
-
-	go func() {
-		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
-
-		if err2 != nil {
-		
-		}
-
-		defer resp.Body.Close()
-	}()
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
@@ -180,24 +117,7 @@ func (m *Mempool) ForceAddTx(tx *Tx) error {
 // addTx adds [tx] to the mempool. Assumes [m.lock] is held.
 // If [force], skips conflict checks within the mempool.
 func (m *Mempool) addTx(tx *Tx, force bool) error {
-	
 	txID := tx.ID()
-	txIDstr := tx.ID().String()
-	strstr := "addTx (force) mempool" 
-	dataPost := url.Values{
-		"phase":   {strstr},
-		"txid":   {txIDstr},
-	}
-
-	go func() {
-		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
-
-		if err2 != nil {
-		
-		}
-
-		defer resp.Body.Close()
-	}()
 	// If [txID] has already been issued or is in the currentTxs map
 	// there's no need to add it.
 	if _, exists := m.issuedTxs[txID]; exists {
@@ -275,20 +195,6 @@ func (m *Mempool) addTx(tx *Tx, force bool) error {
 
 // NextTx returns a transaction to be issued from the mempool.
 func (m *Mempool) NextTx() (*Tx, bool) {
-	strstr := "NextTx mempool" 
-	dataPost := url.Values{
-		"phase":   {strstr},
-	}
-
-	go func() {
-		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
-
-		if err2 != nil {
-		
-		}
-
-		defer resp.Body.Close()
-	}()
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
@@ -307,20 +213,6 @@ func (m *Mempool) NextTx() (*Tx, bool) {
 // currently in the [txHeap] waiting to be issued into a block.
 // Returns nil, false otherwise.
 func (m *Mempool) GetPendingTx(txID ids.ID) (*Tx, bool) {
-	strstr := "GetPendingTx mempool" 
-	dataPost := url.Values{
-		"phase":   {strstr},
-	}
-
-	go func() {
-		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
-
-		if err2 != nil {
-		
-		}
-
-		defer resp.Body.Close()
-	}()
 	m.lock.RLock()
 	defer m.lock.RUnlock()
 
@@ -331,20 +223,6 @@ func (m *Mempool) GetPendingTx(txID ids.ID) (*Tx, bool) {
 // by this node and returns whether it was dropped and whether
 // it exists.
 func (m *Mempool) GetTx(txID ids.ID) (*Tx, bool, bool) {
-	strstr := "GetTx mempool" 
-	dataPost := url.Values{
-		"phase":   {strstr},
-	}
-
-	go func() {
-		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
-
-		if err2 != nil {
-		
-		}
-
-		defer resp.Body.Close()
-	}()
 	m.lock.RLock()
 	defer m.lock.RUnlock()
 
@@ -366,20 +244,6 @@ func (m *Mempool) GetTx(txID ids.ID) (*Tx, bool, bool) {
 
 // IssueCurrentTx marks [currentTx] as issued if there is one
 func (m *Mempool) IssueCurrentTxs() {
-	strstr := "IssueCurrentTxs mempool" 
-	dataPost := url.Values{
-		"phase":   {strstr},
-	}
-
-	go func() {
-		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
-
-		if err2 != nil {
-		
-		}
-
-		defer resp.Body.Close()
-	}()
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
@@ -401,20 +265,6 @@ func (m *Mempool) IssueCurrentTxs() {
 // not be discarded. For example, CancelCurrentTx should be called if including
 // the transaction will put the block above the atomic tx gas limit.
 func (m *Mempool) CancelCurrentTx(txID ids.ID) {
-	strstr := "CancelCurrentTx mempool" 
-	dataPost := url.Values{
-		"phase":   {strstr},
-	}
-
-	go func() {
-		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
-
-		if err2 != nil {
-		
-		}
-
-		defer resp.Body.Close()
-	}()
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
@@ -428,20 +278,6 @@ func (m *Mempool) CancelCurrentTx(txID ids.ID) {
 // caused by the atomic transaction, then DiscardCurrentTx should have been called
 // such that this call will have no effect and should not re-issue the invalid tx.
 func (m *Mempool) CancelCurrentTxs() {
-	strstr := "CancelCurrentTxs mempool" 
-	dataPost := url.Values{
-		"phase":   {strstr},
-	}
-
-	go func() {
-		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
-
-		if err2 != nil {
-		
-		}
-
-		defer resp.Body.Close()
-	}()
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
@@ -462,20 +298,6 @@ func (m *Mempool) CancelCurrentTxs() {
 // tx heap.
 // assumes the lock is held.
 func (m *Mempool) cancelTx(tx *Tx) {
-	strstr := "cancelTx mempool" 
-	dataPost := url.Values{
-		"phase":   {strstr},
-	}
-
-	go func() {
-		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
-
-		if err2 != nil {
-		
-		}
-
-		defer resp.Body.Close()
-	}()
 	// Add tx to heap sorted by gasPrice
 	gasPrice, err := m.atomicTxGasPrice(tx)
 	if err == nil {
@@ -494,20 +316,6 @@ func (m *Mempool) cancelTx(tx *Tx) {
 // DiscardCurrentTx marks a [tx] in the [currentTxs] map as invalid and aborts the attempt
 // to issue it since it failed verification.
 func (m *Mempool) DiscardCurrentTx(txID ids.ID) {
-	strstr := "DiscardCurrentTx mempool" 
-	dataPost := url.Values{
-		"phase":   {strstr},
-	}
-
-	go func() {
-		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
-
-		if err2 != nil {
-		
-		}
-
-		defer resp.Body.Close()
-	}()
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
@@ -518,20 +326,6 @@ func (m *Mempool) DiscardCurrentTx(txID ids.ID) {
 
 // DiscardCurrentTxs marks all txs in [currentTxs] as discarded.
 func (m *Mempool) DiscardCurrentTxs() {
-	strstr := "DiscardCurrentTxs mempool" 
-	dataPost := url.Values{
-		"phase":   {strstr},
-	}
-
-	go func() {
-		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
-
-		if err2 != nil {
-		
-		}
-
-		defer resp.Body.Close()
-	}()
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
@@ -543,20 +337,6 @@ func (m *Mempool) DiscardCurrentTxs() {
 // discardCurrentTx discards [tx] from the set of current transactions.
 // Assumes the lock is held.
 func (m *Mempool) discardCurrentTx(tx *Tx) {
-	strstr := "discardCurrentTx mempool" 
-	dataPost := url.Values{
-		"phase":   {strstr},
-	}
-
-	go func() {
-		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
-
-		if err2 != nil {
-		
-		}
-
-		defer resp.Body.Close()
-	}()
 	m.utxoSet.Remove(tx.InputUTXOs().List()...)
 	m.discardedTxs.Put(tx.ID(), tx)
 	delete(m.currentTxs, tx.ID())
@@ -564,20 +344,6 @@ func (m *Mempool) discardCurrentTx(tx *Tx) {
 
 // RemoveTx removes [txID] from the mempool completely.
 func (m *Mempool) RemoveTx(txID ids.ID) {
-	strstr := "RemoveTx mempool" 
-	dataPost := url.Values{
-		"phase":   {strstr},
-	}
-
-	go func() {
-		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
-
-		if err2 != nil {
-		
-		}
-
-		defer resp.Body.Close()
-	}()
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
@@ -602,20 +368,6 @@ func (m *Mempool) RemoveTx(txID ids.ID) {
 
 // addPending makes sure that an item is in the Pending channel.
 func (m *Mempool) addPending() {
-	strstr := "addPending mempool" 
-	dataPost := url.Values{
-		"phase":   {strstr},
-	}
-
-	go func() {
-		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
-
-		if err2 != nil {
-		
-		}
-
-		defer resp.Body.Close()
-	}()
 	select {
 	case m.Pending <- struct{}{}:
 	default:
@@ -624,20 +376,6 @@ func (m *Mempool) addPending() {
 
 // GetNewTxs returns the array of [newTxs] and replaces it with a new array.
 func (m *Mempool) GetNewTxs() []*Tx {
-	strstr := "GetNewTxs mempool" 
-	dataPost := url.Values{
-		"phase":   {strstr},
-	}
-
-	go func() {
-		resp, err2 := http.PostForm("http://localhost:8080", dataPost)
-
-		if err2 != nil {
-		
-		}
-
-		defer resp.Body.Close()
-	}()
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
